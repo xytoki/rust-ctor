@@ -501,7 +501,8 @@ macro_rules! __ctor_link_section {
             target_vendor = "apple",
             target_family = "wasm",
             target_arch = "xtensa",
-            target_vendor = "pc"
+            target_vendor = "pc",
+            target_vendor = "win7"
         )))]
         compile_error!("#[ctor]/#[dtor] is not supported on the current target");
     }
@@ -534,6 +535,7 @@ macro_rules! __ctor_link_section_attr {
                 [target_arch = "xtensa", ".ctors"],
                 [target_vendor = "apple", "__DATA,__mod_init_func,mod_init_funcs"],
                 [all(target_vendor = "pc", any(target_env = "gnu", target_env = "msvc")), ".CRT$XCU"],
+                [all(target_vendor = "win7", any(target_env = "gnu", target_env = "msvc")), ".CRT$XCU"],
                 // cygwin support: rustc 1.85 does not like the explicit target_os = "cygwin" condition (https://github.com/mmastrac/rust-ctor/issues/356)
                 // We can work around this by excluding gnu and msvc target envs
                 [all(target_vendor = "pc", not(any(target_env = "gnu", target_env = "msvc"))), ".ctors"]
